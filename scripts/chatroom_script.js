@@ -5,6 +5,8 @@ window.addEventListener('load', function(){
 	//hidden.value = input_nickname;
 
   var messageForm = document.getElementById('messageForm');
+  //var 
+
   //messageForm.addEventListener('submit', sendMessage, false);
   //show the message in five seconds
   //setInterval(printResult, 3000);
@@ -28,21 +30,12 @@ window.addEventListener('load', function(){
   socket.on('newMember', function(nicknames){
     var user_list = document.getElementById('users'); 
     user_list.innerHTML = " "; 
-    for(var i =0 ; i<nicknames.length; i++){
+    for(var i = 0 ; i<nicknames.length; i++){
       user_list.innerHTML +=nicknames[i]+"<br>"; 
     }
     //user_list.innerHTML +=nicknames[nicknames.length-1]; 
   });
 
-  //2.a member leave
-  /*socket.on('removeMember', function(nickname){
-
-  }); */
-
-  //3. change their nickname 
- /* socket.on('nameChange', function(){
-
-  }); */
 
 
   // get the nickname
@@ -54,12 +47,25 @@ window.addEventListener('load', function(){
     for(var i =0; i<messages.length; i++){
       var space = document.getElementById('message'); 
       space.innerHTML += messages[i].nickname+ ":  "+ messages[i].body+ "<br>"; 
-
     }
   });
-
+  //should be the form name 
+  var newNicknameForm = document.getElementById('nicknameChange'); 
+  if(newNicknameForm!=null){
+    newNicknameForm.addEventListener('submit',changeNickName, false); 
+  }
   messageForm.addEventListener('submit', sendMessage, false);
 }, false);
+
+//change the user: send data from the browser to the server 
+
+
+function changeNickName(e){
+ e.preventDefault();
+ console.log("changedNickName is called"); 
+ var changedNickname = document.getElementById('changedNicknameField').value; 
+ socket.emit('changeName',changedNickname); 
+}
 
 function meta(name) {
     var tag = document.querySelector('meta[name=' + name + ']');
@@ -75,7 +81,7 @@ function sendMessage(e) {
   //var nickname =document.getElementById('nicknameField').value; // get nickname 
   var message = document.getElementById('messageField').value; // get message 
   //var post_string = "nickname=" + nickname + "&message=" + message;
-
+  console.log("send message is called"); 
   socket.emit('message', message); 
   // send it to the server
  /* var req = new XMLHttpRequest();
@@ -85,8 +91,7 @@ function sendMessage(e) {
   document.getElementById('messageField').value =""; */
 }
 
-var old_id = -1; 
-var count =0; 
+ 
 function printResult() {
    $.ajax(
    	{ url: '/'+ meta('roomName')+'/messages.json',

@@ -35,7 +35,8 @@ app.use("/scripts", express.static(__dirname+'/scripts'));
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 
-var test_set = new Set(); 
+var test_set = new Set();
+//var address_set = new Set();  
 app.get('/', function(req,res){
 	//console.log(__dirname+"/templates/index.html"); 
  	res.render('index.html'); 
@@ -66,6 +67,7 @@ io.sockets.on('connection', function(socket){
     
         socket.join(roomName); // this is a socket.io method
         socket.nickname = nickname; // yay JavaScript! see below
+        socket.roomname = roomName; 
         // get a list of messages currently in the room, then send it back
         //users.add(nickname); 
 
@@ -74,9 +76,7 @@ io.sockets.on('connection', function(socket){
         var users = [];
         for (var s in clients_in_the_room.connected){
             var client_nickname = io.sockets.connected[s].nickname;
-            
             if(client_nickname!=undefined){
-                console.log(client_nickname);
                 users.push(client_nickname); 
             } 
         }
@@ -104,22 +104,33 @@ io.sockets.on('connection', function(socket){
         			if(item!=undefined){
         				messages.push(item);
         				//users.add(item.nickname); 
-        				//console.log(users); 
-        				
+        				//console.log(users); 		
         			}
         		}//for loop
         	}//if statement 
         	callback(messages);
-        });
+        }); //query function 
     });
 
     // this gets emitted if a user changes their nickname
-    socket.on('nickname', function(nickname){
-        socket.nickname = nickname;
-        //broadcast update to room! (see below)
-        //broadcastNickNameChanged(room_name, nickname); 
-    });
 
+    socket.on('changeName', function(changedNickname){
+        console.log("changeName is called"); 
+        console.log("parameters: "+ changedNickname + " and "+roomName); 
+        var oldNickname= socket.nickname; 
+        socket.nickname = changedNickname; 
+        var roomName = Object.keys(io.sockets.adapter.sids[socket.id])[1];
+        var clients_in_the_room = io.sockets.in(roomName);
+        var users = [];
+        for (var s in clients_in_the_room.connected){
+            var client_nickname = io.sockets.connected[s].nickname;
+            if(client_nickname!=undefined){
+                console.log("clientName: "+ client_nickname);
+                users.push(client_nickname); 
+            } 
+        }
+        io.sockets.in(roomName).emit('newMember', users);     
+    }); 
     // the client emits this when they want to send a message
     socket.on('message', function(message){
         // process an incoming message (don't forget to broadcast it to everyone!)
@@ -136,6 +147,8 @@ io.sockets.on('connection', function(socket){
         // you could do something like this:
         
         var roomName = Object.keys(io.sockets.adapter.sids[socket.id])[1];
+        //console.log("message is being called"); 
+        //console.log(roomName); 
         var nickname = socket.nickname; 
         var sql_insert = 'INSERT INTO messages VALUES ($1, $2, $3, $4,$5)'; 
     	conn.query(sql_insert, [,roomName, nickname,message, null]); 
@@ -145,16 +158,21 @@ io.sockets.on('connection', function(socket){
     	io.sockets.in(roomName).emit('message', nickname, message);
     }); 
     // the client disconnected/closed their browser window
-    socket.on('disconnect', function(){
+    socket.on('disconnect', function(socket){
     	console.log("disconnect"); 
-    	console.log(io.sockets.adapter.sids[socket.id]); 
-    	if(io.sockets.adapter.sids[socket.id]!=undefined){
-    		//var roomName = Object.keys(io.sockets.adapter.sids[socket.id])[1];
-            var roomName = socket.roomName; 
-            console.log("")
-    		socket.leave(roomName); 
-    	}
-        
+        var clients_in_the_room = io.sockets.in(socket.room);
+        var users = [];
+        var roomName; 
+        for (var s in clients_in_the_room.connected){
+            var client_nickname = io.sockets.connected[s].nickname;
+            roomName =io.sockets.connected[s].roomname; 
+            //console.log("roomName: "+ roomName); 
+            if(client_nickname!=undefined){
+                //console.log("clientName: "+ client_nickname);
+                users.push(client_nickname); 
+            } 
+        }
+        io.sockets.in(roomName).emit('newMember', users);         
     });
 });
 

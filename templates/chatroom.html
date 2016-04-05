@@ -14,11 +14,19 @@
 <body>
 	Chatroom
 	<div id="message"></div>
-	<form method="POST" action="/{{roomName}}/messages" id="messageForm">
+	<form method="POST" id="messageForm">
     	<input type="text" name="message" id="messageField">
     	<input type="hidden" name="nickname" id="nicknameField" value="">
     	<input type="submit" value="Send">
 	</form>
 	<div id="users"></div>
+
+	<div id="nicknameChange">
+		<form method="POST" id="nicknameChange">
+			<p>Nickname Change</p>
+			<input type="text" name="nickname" id="changedNicknameField">
+			<input type="submit" value="Change">
+		</form>
+	</div>
 </body>
 </html>
