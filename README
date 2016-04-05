@@ -1,0 +1,15 @@
+A user can post a message and see messages by using my chatroom. 
+
+The user is directed to the index.html where one seees a button to create a chatroom. 
+When the user clicks the button, the one is directed to a speicifc room html. 
+The user needs to enter a nickname on the prompt before one acutally enters messages. 
+The data that user puts in is saved in the actual database, and asynchornously, the previosu messages are being queried and posted on the website. 
+
+For the future, I expect to have a better gui, and want to have a log-in functionality. 
+
+Any special things: 
+My chatroom is being updated every 5 seconds, yet I do not post all the messages over and over again since it is expensive. 
+What I am doing here is I am only adding the last entry to the html. 
+So the user can still see the messages but it seems like the newly message is being seen. 
+
+The drawback is my chatroom message is being slowly updated. 

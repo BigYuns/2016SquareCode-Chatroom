@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta name="roomName" content="{{roomName}}">
+	<link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.0/jquery.min.js"></script>
+    <script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
+	
+	<!-- socket.io -->
+	<script src="/socket.io/socket.io.js"></script>
+	<script type="text/javascript" src="../scripts/chatroom_script.js"></script>	
+	<title>Room: {{roomName}}</title>
+</head>
+<body>
+	Chatroom
+	<div id="message"></div>
+	<form method="POST" action="/{{roomName}}/messages" id="messageForm">
+    	<input type="text" name="message" id="messageField">
+    	<input type="hidden" name="nickname" id="nicknameField" value="">
+    	<input type="submit" value="Send">
+	</form>
+	<div id="users"></div>
+</body>
+</html>
