@@ -84,6 +84,7 @@ io.sockets.on('connection', function(socket){
             console.log("long name: "+io.sockets.connected[s].roomname ); 
             console.log("short name: "+ roomName); 
             if(io.sockets.connected[s].roomname==roomName){
+                console.log(s); 
                 var client_nickname = io.sockets.connected[s].nickname;
                 console.log("for loop: "+client_nickname); 
                 if(client_nickname!=undefined){
@@ -169,26 +170,47 @@ io.sockets.on('connection', function(socket){
     //connected roomName: 
     //var disconnectedRoomName = Object.keys(io.sockets.adapter.sids[socket.id])[1];
     //console.log("disconnectedRoomName: "+disconnectedRoomName); 
-    
-    socket.on('disconnect', function(socket){
-    	//console.log("disconnect");
-        //console.log(socket.room); 
+
+    //var roomName = (io.sockets.adapter.sids[socket.id])[1];
+    socket.on('disconnect', function(){
+        //console.log(io.sockets.adapter.rooms[roomName].sockets); 
+        console.log("=====================")
+        console.log("disconnected"); 
+        /*console.log("adapter"+io.sockets.adapter); 
+        console.log("no paremter socket: "+ socket);
+        console.log("deleted socket  "+ socket.id);  
+        console.log("no parameter socket attributes  "+ socket.roomname); 
+        console.log(io.sockets.adapter.rooms); */
         var clients_in_the_room = io.sockets.in(socket.room); 
         var users = [];
-        var roomName; 
+        var remainingRoomName; 
+        var remainingRoomName_array = []; 
+        var i =0; 
+        var disconnectedRoomName = socket.roomname; 
         for (var s in clients_in_the_room.connected){
             var client_nickname = io.sockets.connected[s].nickname;
             //console.log("disconnect for : "+ client_nickname); 
-            remainingRoomName =io.sockets.connected[s].roomname; 
-            //console.log("disconnect socket roomName: "+ remainingRoomName); 
-            //if(remainingRoomName==disconnectedRoomName){
+            remainingRoomName = io.sockets.connected[s].roomname; 
+            remainingRoomName_array[i] = remainingRoomName; 
+            i++; 
+            console.log("remainingRoomName "+ remainingRoomName); 
+            console.log("disconnectedRoomName "+ disconnectedRoomName); 
+            if(remainingRoomName==disconnectedRoomName){
                 if(client_nickname!=undefined){
                     //console.log("clientName: "+ client_nickname);
                     users.push(client_nickname); 
                 } 
-            //}  
+            }  
         }//for loop
-        io.sockets.in(roomName).emit('newMember', users);         
+        console.log("here is called"); 
+        for(var i=0; i<remainingRoomName_array.length; i++){
+            if(remainingRoomName_array[i]==disconnectedRoomName){
+                io.sockets.in(remainingRoomName_array[i]).emit('newMember', users);   
+            }
+
+        }
+        
+              
     });
 });
 
