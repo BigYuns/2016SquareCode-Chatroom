@@ -38,6 +38,7 @@ app.use(bodyParser.json());
 app.get('/', function(req,res){
  	res.render('index.html'); 
 });
+
 var test_set = new Set();
 app.get('/generate', function(request,response){
 	var chatroomId = generateRoomIdentifier(); 
@@ -54,10 +55,6 @@ app.get('/:roomName', function(request,response){
 		response.render('chatroom.html', {roomName: name}); 
 	}
 }); 
-
-
-//var users = new Set([]);
-//var users=[]; 
 
 var roomNames = Array.from(test_set); 
 io.sockets.on('connection', function(socket){
@@ -139,7 +136,12 @@ io.sockets.on('connection', function(socket){
     	conn.query(sql_insert, [,roomName, nickname,message, null]); 
     	io.sockets.in(roomName).emit('message', nickname, message);
     }); 
-
+    
+    socket.on('getRooms', function(callback){
+        var test_array = Array.from(test_set); 
+        callback(test_array); 
+    }); 
+    
     socket.on('disconnect', function(){
         var clients_in_the_room = io.sockets.in(socket.roomname); 
         var users = [];
