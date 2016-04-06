@@ -1,4 +1,5 @@
-A user can post a message and see messages by using my chatroom. 
+#Readme for Chatroom 1. 
+A user can post messages and see messagess by using my chatroom. 
 
 The user is directed to the index.html where one seees a button to create a chatroom. 
 When the user clicks the button, the one is directed to a speicifc room html. 
@@ -13,3 +14,8 @@ What I am doing here is I am only adding the last entry to the html.
 So the user can still see the messages but it seems like the newly message is being seen. 
 
 The drawback is my chatroom message is being slowly updated. 
+
+#README for Chatroom 2. 
+This time I modified my original chatroom to be run in real time. 
+By using socket.io, I made the communication between the sever and the client in real time. 
+This choice solved the lacency issue with the original chatroom. 
