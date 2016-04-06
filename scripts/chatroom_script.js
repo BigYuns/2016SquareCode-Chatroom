@@ -52,7 +52,6 @@ window.addEventListener('load', function(){
 //change the user: send data from the browser to the server 
 function changeNickName(e){
  e.preventDefault();
- console.log("changedNickName is called"); 
  var changedNickname = document.getElementById('changedNicknameField').value; 
  socket.emit('changeName',changedNickname); 
 }
@@ -72,6 +71,7 @@ function sendMessage(e) {
   var message = document.getElementById('messageField').value; // get message 
   //var post_string = "nickname=" + nickname + "&message=" + message;
   socket.emit('message', message); 
+  document.getElementById('messageField').value=" "; 
   // send it to the server
  /* var req = new XMLHttpRequest();
   req.open('POST', '/' + meta('roomName') + '/messages', true);
