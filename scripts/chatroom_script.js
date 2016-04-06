@@ -4,11 +4,10 @@ window.addEventListener('load', function(){
 	//var input_nickname = window.prompt("What is your nickname?");
 	//hidden.value = input_nickname;
   var messageForm = document.getElementById('messageForm');
-  //var 
 
-  //messageForm.addEventListener('submit', sendMessage, false);
+  /*messageForm.addEventListener('submit', sendMessage, false);
   //show the message in five seconds
-  //setInterval(printResult, 3000);
+  setInterval(printResult, 3000);*/
   
   // handle incoming messages
   socket.on('message', function(nickname, message){
@@ -21,22 +20,16 @@ window.addEventListener('load', function(){
   // you may want to consider having separate handlers for members joining, leaving, and changing their nickname
   /*socket.on('membershipChanged', function(members){
     // display the new member list
-
   });*/
 
   //1.new member join
-  
   socket.on('newMember', function(nicknames){
     var user_list = document.getElementById('users'); 
     user_list.innerHTML = " "; 
     for(var i = 0 ; i<nicknames.length; i++){
       user_list.innerHTML +=nicknames[i]+"<br>"; 
     }
-    //user_list.innerHTML +=nicknames[nicknames.length-1]; 
   });
-
-
-
   // get the nickname
   var nickname = prompt('Enter a nickname:');
   hidden.value = nickname;
@@ -57,8 +50,6 @@ window.addEventListener('load', function(){
 }, false);
 
 //change the user: send data from the browser to the server 
-
-
 function changeNickName(e){
  e.preventDefault();
  console.log("changedNickName is called"); 
@@ -67,10 +58,10 @@ function changeNickName(e){
 }
 
 function meta(name) {
-    var tag = document.querySelector('meta[name=' + name + ']');
-    if (tag != null)
-        return tag.content;
-    return '';
+  var tag = document.querySelector('meta[name=' + name + ']');
+  if (tag != null)
+    return tag.content;
+  return '';
 }
 
 function sendMessage(e) {
@@ -80,7 +71,6 @@ function sendMessage(e) {
   //var nickname =document.getElementById('nicknameField').value; // get nickname 
   var message = document.getElementById('messageField').value; // get message 
   //var post_string = "nickname=" + nickname + "&message=" + message;
-  console.log("send message is called"); 
   socket.emit('message', message); 
   // send it to the server
  /* var req = new XMLHttpRequest();
