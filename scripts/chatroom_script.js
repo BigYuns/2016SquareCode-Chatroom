@@ -3,7 +3,6 @@ window.addEventListener('load', function(){
 	var hidden = document.getElementById('nicknameField'); 
 	//var input_nickname = window.prompt("What is your nickname?");
 	//hidden.value = input_nickname;
-
   var messageForm = document.getElementById('messageForm');
   //var 
 
@@ -89,10 +88,10 @@ function sendMessage(e) {
   req.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
   req.send(post_string);
   document.getElementById('messageField').value =""; */
-}
+} 
 
  
-function printResult() {
+/*function printResult() {
    $.ajax(
    	{ url: '/'+ meta('roomName')+'/messages.json',
       context: document.body,
@@ -124,4 +123,4 @@ function printResult() {
       	}
       }
    });
-}
+} */

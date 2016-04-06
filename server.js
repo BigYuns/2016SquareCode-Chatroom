@@ -35,13 +35,13 @@ app.use("/scripts", express.static(__dirname+'/scripts'));
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 
-var test_set = new Set();
+
 //var address_set = new Set();  
 app.get('/', function(req,res){
 	//console.log(__dirname+"/templates/index.html"); 
  	res.render('index.html'); 
 });
-
+var test_set = new Set();
 app.get('/generate', function(request,response){
 	var chatroomId = generateRoomIdentifier(); 
 	while(test_set.has(chatroomId)){
@@ -53,6 +53,7 @@ app.get('/generate', function(request,response){
 
 app.get('/:roomName', function(request,response){
 	var name = request.params.roomName; 
+    console.log(test_set); 
 	if(name != 'favicon.ico'){
 		response.render('chatroom.html', {roomName: name}); 
 	}
@@ -61,34 +62,36 @@ app.get('/:roomName', function(request,response){
 
 //var users = new Set([]);
 //var users=[]; 
+
+var roomNames = Array.from(test_set); 
 io.sockets.on('connection', function(socket){
     // clients emit this when they join new rooms
     socket.on('join', function(roomName, nickname, callback){
-    
+        //roomNames.add(roomName);
         socket.join(roomName); // this is a socket.io method
         socket.nickname = nickname; // yay JavaScript! see below
         socket.roomname = roomName; 
         // get a list of messages currently in the room, then send it back
         //users.add(nickname); 
+        console.log("join"); 
+        console.log(socket.roomname); 
 
         var clients_in_the_room = io.sockets.in(roomName);
-                
+        console.log(clients_in_the_room); 
+
         var users = [];
         for (var s in clients_in_the_room.connected){
-            var client_nickname = io.sockets.connected[s].nickname;
-            if(client_nickname!=undefined){
-                users.push(client_nickname); 
-            } 
+            console.log("long name: "+io.sockets.connected[s].roomname ); 
+            console.log("short name: "+ roomName); 
+            if(io.sockets.connected[s].roomname==roomName){
+                var client_nickname = io.sockets.connected[s].nickname;
+                console.log("for loop: "+client_nickname); 
+                if(client_nickname!=undefined){
+                    users.push(client_nickname); 
+                } 
+            }
+            
         }
-        /*for (var socket in clients_in_the_room.connected) {
-                  var client_nickname = io.sockets.connected[socket].nickname;
-                  if(client_nickname != undefined) {
-                    console.log(client_nickname);
-                    users.push(client_nickname);
-                  }
-                }*/
-        //users.push(nickname); 
-        //users[nickname] = nickname; 
         io.sockets.in(roomName).emit('newMember', users); 
         var messages = [];
        	var sql = 'SELECT id, nickname, body FROM messages WHERE room='+'"'+roomName+'"';
@@ -112,22 +115,27 @@ io.sockets.on('connection', function(socket){
         }); //query function 
     });
 
-    // this gets emitted if a user changes their nickname
-
+    
     socket.on('changeName', function(changedNickname){
         console.log("changeName is called"); 
-        console.log("parameters: "+ changedNickname + " and "+roomName); 
+        
         var oldNickname= socket.nickname; 
-        socket.nickname = changedNickname; 
+
         var roomName = Object.keys(io.sockets.adapter.sids[socket.id])[1];
+        socket.nickname = changedNickname; 
+        socket.roomname = roomName; 
+
         var clients_in_the_room = io.sockets.in(roomName);
         var users = [];
         for (var s in clients_in_the_room.connected){
-            var client_nickname = io.sockets.connected[s].nickname;
-            if(client_nickname!=undefined){
-                console.log("clientName: "+ client_nickname);
-                users.push(client_nickname); 
-            } 
+            console.log(io.sockets.connected[s].roomname); 
+            if(io.sockets.connected[s].roomname==roomName){
+                var client_nickname = io.sockets.connected[s].nickname;
+                if(client_nickname!=undefined){
+                    users.push(client_nickname); 
+                } 
+            }
+            
         }
         io.sockets.in(roomName).emit('newMember', users);     
     }); 
@@ -158,20 +166,28 @@ io.sockets.on('connection', function(socket){
     	io.sockets.in(roomName).emit('message', nickname, message);
     }); 
     // the client disconnected/closed their browser window
+    //connected roomName: 
+    //var disconnectedRoomName = Object.keys(io.sockets.adapter.sids[socket.id])[1];
+    //console.log("disconnectedRoomName: "+disconnectedRoomName); 
+    
     socket.on('disconnect', function(socket){
-    	console.log("disconnect"); 
-        var clients_in_the_room = io.sockets.in(socket.room);
+    	//console.log("disconnect");
+        //console.log(socket.room); 
+        var clients_in_the_room = io.sockets.in(socket.room); 
         var users = [];
         var roomName; 
         for (var s in clients_in_the_room.connected){
             var client_nickname = io.sockets.connected[s].nickname;
-            roomName =io.sockets.connected[s].roomname; 
-            //console.log("roomName: "+ roomName); 
-            if(client_nickname!=undefined){
-                //console.log("clientName: "+ client_nickname);
-                users.push(client_nickname); 
-            } 
-        }
+            //console.log("disconnect for : "+ client_nickname); 
+            remainingRoomName =io.sockets.connected[s].roomname; 
+            //console.log("disconnect socket roomName: "+ remainingRoomName); 
+            //if(remainingRoomName==disconnectedRoomName){
+                if(client_nickname!=undefined){
+                    //console.log("clientName: "+ client_nickname);
+                    users.push(client_nickname); 
+                } 
+            //}  
+        }//for loop
         io.sockets.in(roomName).emit('newMember', users);         
     });
 });
@@ -207,6 +223,7 @@ app.get('/:roomName/messages.json', function(request, response){
 		response.json(messages);
 	});
 });*/
+//error: showing all the rooms that are connected // so after one left it should be free
 
 
 app.get('*', function(req,res){

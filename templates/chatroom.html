@@ -3,6 +3,7 @@
 <head>
     <meta name="roomName" content="{{roomName}}">
 	<link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
+	<link rel="stylesheet" type="text/css" href="../css/chatroom.css">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.0/jquery.min.js"></script>
     <script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
 	
@@ -12,15 +13,39 @@
 	<title>Room: {{roomName}}</title>
 </head>
 <body>
-	Chatroom
-	<div id="message"></div>
+	<div class="container">
+	<nav class="navbar navbar-light" style="background-color: #e3f2fd;">
+	  <div class="nav navbar-nav">
+	    <a href="/" class="btn btn-warning btn-lg active" role="button">Home</a>
+	    <div class="btn-group">
+	      <button type="button" class="btn btn-info btn-lg dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+	        Active Chatrooms
+	      </button>
+	      <div class="dropdown-menu">
+	        <a class="dropdown-item" href="#">Action</a>
+	        <a class="dropdown-item" href="#">Another action</a>
+	        <a class="dropdown-item" href="#">Something else here</a>
+	        <div class="dropdown-divider"></div>
+	        <a class="dropdown-item" href="#">Separated link</a>
+	      </div>
+	    </div>
+	  </div>
+	</nav>
+	</div>
+
+	<center>Chatroom
+	<div id="message" style="width: 500px; height: 500px; border: 1px solid black;"></div>
+	<br>
 	<form method="POST" id="messageForm">
-    	<input type="text" name="message" id="messageField">
+    	<input type="text" name="message" id="messageField" style="width: 200px;height: 40px;">
     	<input type="hidden" name="nickname" id="nicknameField" value="">
     	<input type="submit" value="Send">
 	</form>
+	<hr>
+	Active Users In this Chatroom
 	<div id="users"></div>
 
+	<hr>
 	<div id="nicknameChange">
 		<form method="POST" id="nicknameChange">
 			<p>Nickname Change</p>
@@ -28,5 +53,6 @@
 			<input type="submit" value="Change">
 		</form>
 	</div>
+	</center>
 </body>
 </html>
