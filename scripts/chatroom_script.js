@@ -32,6 +32,10 @@ window.addEventListener('load', function(){
   });
   // get the nickname
   var nickname = prompt('Enter a nickname:');
+  while(nickname.trim().length < 1) 
+  {
+    nickname = prompt('Sorry! Your nickname must be at least one character long.');
+  }
   hidden.value = nickname;
 
   // join the room
