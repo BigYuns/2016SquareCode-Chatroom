@@ -12,7 +12,7 @@ var conn = anyDB.createConnection('sqlite3://chatroom.db');
 and you will get a database error if you try to reuse one. 
 Be sure to handle that error, and generate a new identifier under those circumstances.
 A: UNIQUE can be the solution? Or should I handle the situation? */
-var sql_create = 'CREATE TABLE messages (id INTEGER PRIMARY KEY AUTOINCREMENT, room TEXT NOT NULL, nickname TEXT, body TEXT, time INTEGER )'; 
+var sql_create = 'CREATE TABLE messages (id INTEGER PRIMARY KEY AUTOINCREMENT, room TEXT NOT NULL, nickname TEXT NOT NULL UNIQUE, body TEXT, time INTEGER )'; 
 conn.query(sql_create).on('end', function(){
 	console.log("Made table!"); 
 })
@@ -154,7 +154,11 @@ io.sockets.on('connection', function(socket){
                 if(client_nickname!=undefined){
                     users.push(client_nickname); 
                 } 
-            }  
+            }
+        }
+
+        if(!users.length) {
+            test_set.delete(disconnectedRoomName); 
         }
         io.sockets.in(socket.roomname).emit('newMember', users);             
     });

@@ -33,10 +33,12 @@
 	<script>
 		var socket = io.connect();
 		var list = document.getElementById('dropdown'); 
+
 		function activeRooms(){
-			console.log("called"); 
+			list.innerHTML = ''; 
 			socket.emit('getRooms', function(rooms){
 				//print out the rooms to the buttons 
+				console.log("parameter rooms "  + rooms); 
 				for(var i=0; i<rooms.length; i++){
 					var li = document.createElement('li'); 
 					li.innerHTML = '<a href="/'+rooms[i]+'">'+rooms[i]+'</a>'; 
