@@ -57,6 +57,17 @@ window.addEventListener('load', function(){
 function changeNickName(e){
  e.preventDefault();
  var changedNickname = document.getElementById('changedNicknameField').value; 
+ var users = document.getElementById('users').innerHTML; 
+ console.log(users); 
+ users = users.split('<br>'); 
+ console.log(users); 
+ for(var i = 0; i < users.length; i++) { 
+  if(users[i] == changedNickname)
+  { 
+    alert("Sorry, a user with that name already exists!"); 
+    return;     
+  }
+ }
  socket.emit('changeName',changedNickname); 
 }
 

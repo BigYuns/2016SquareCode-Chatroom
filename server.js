@@ -101,6 +101,7 @@ io.sockets.on('connection', function(socket){
         var oldNickname= socket.nickname; 
         var roomName = Object.keys(io.sockets.adapter.sids[socket.id])[1];
         socket.nickname = changedNickname; 
+
         socket.roomname = roomName; 
 
         var clients_in_the_room = io.sockets.in(roomName);
@@ -113,6 +114,7 @@ io.sockets.on('connection', function(socket){
                 } 
             } 
         }
+
         io.sockets.in(roomName).emit('newMember', users);     
     }); 
     // the client emits this when they want to send a message
