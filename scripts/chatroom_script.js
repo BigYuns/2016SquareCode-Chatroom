@@ -32,6 +32,9 @@ window.addEventListener('load', function(){
   });
   // get the nickname
   var nickname = prompt('Enter a nickname:');
+  while(nickname.trim().length < 1) {
+    nickname = prompt('Sorry! Your nickname must be at least one character long.');
+  }
   hidden.value = nickname;
 
   // join the room
@@ -53,6 +56,14 @@ window.addEventListener('load', function(){
 function changeNickName(e){
  e.preventDefault();
  var changedNickname = document.getElementById('changedNicknameField').value; 
+ var users = document.getElementById('users').innerHTML; 
+ users = users.split('<br>'); 
+ for(var i = 0; i < users.length; i++) { 
+  if(users[i] == changedNickname){  
+    alert("Sorry, a user with that name already exists!"); 
+    return;
+  }
+}
  socket.emit('changeName',changedNickname); 
 }
 

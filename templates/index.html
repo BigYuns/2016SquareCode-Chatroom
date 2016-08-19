@@ -1,17 +1,33 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <meta charset="utf-8">
+   <meta charset="utf-8">
+
+   
    <title> homepage</title>
+
+   <base href="/">
+   <link rel="stylesheet" type="text/css" href="../css/freelancer.css">
 	<link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.0/jquery.min.js"></script>
+
+
     <script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
 	<script src="/socket.io/socket.io.js"></script>
 	<!--<script type="text/javascript" src="../scripts/index_script.js"></script>-->
+
+	<!-- Custom Fonts -->
+	<link href="../vendor/font-awesome/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+	<link href="https://fonts.googleapis.com/css?family=Montserrat:400,700" rel="stylesheet" type="text/css">
+	<link href="https://fonts.googleapis.com/css?family=Lato:400,700,400italic,700italic" rel="stylesheet" type="text/css">
+
 </head>
-<body>
+<body id = "page-top" class= "index">
+
 	<div class="container">
-	<nav class="navbar navbar-light" style="background-color: #e3f2fd;">
+	<!--<nav class="navbar navbar-light" style="background-color: #e3f2fd;">-->
+	<!-- Navigation -->
+	<nav id="mainNav" class="navbar navbar-default navbar-fixed-top navbar-custom">
 	  <div class="nav navbar-nav">
 	    <a href="/" class="btn btn-warning btn-lg active" role="button">Home</a>
 	    <div class="btn-group">
@@ -27,6 +43,18 @@
 	</nav>
 	</div>
 
+	<header>
+	<div class="container">
+	    <div class="row">
+	        <div class="col-lg-12">
+	            <img class="img-responsive" src="http://www.pawbuzz.com/wp-content/uploads/sites/551/2014/11/corgi-puppies-21.jpg" alt="">
+	            <div class="intro-text">
+	                <hr class="star-light">
+	            </div>
+	        </div>
+	    </div>
+	</div>
+	</header>
 	<center>
 	<a href="/generate"><button type="button" class="btn btn-primary btn-lg" id='chatBtn'>Create</button></a>
 	</center>
@@ -37,8 +65,6 @@
 		function activeRooms(){
 			list.innerHTML = ''; 
 			socket.emit('getRooms', function(rooms){
-				//print out the rooms to the buttons 
-				console.log("parameter rooms "  + rooms); 
 				for(var i=0; i<rooms.length; i++){
 					var li = document.createElement('li'); 
 					li.innerHTML = '<a href="/'+rooms[i]+'">'+rooms[i]+'</a>'; 

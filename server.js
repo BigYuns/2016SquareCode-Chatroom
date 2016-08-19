@@ -3,6 +3,7 @@ var express = require('express'),
 	anyDB = require('any-db'),
 	path    = require("path"),
 	engines = require('consolidate'); 
+    bootstrap = require("express-bootstrap-service");
 
 
 
@@ -34,6 +35,7 @@ app.set('views', __dirname + '/templates');
 app.use("/scripts", express.static(__dirname+'/scripts')); 
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
+app.use(bootstrap.serve);
 
 app.get('/', function(req,res){
  	res.render('index.html'); 

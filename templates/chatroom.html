@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
+   {#  <meta name="roomName" content="{{roomName}}"> #}
     <meta name="roomName" content="{{roomName}}">
 	<link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
 	<link rel="stylesheet" type="text/css" href="../css/chatroom.css">
@@ -10,17 +11,19 @@
 	<!-- socket.io -->
 	<script src="/socket.io/socket.io.js"></script>
 	<script type="text/javascript" src="../scripts/chatroom_script.js"></script>	
-	<title>Room: {{roomName}}</title>
+	{# <title>Room: {{roomName}}</title> #}
+	<title>Room roomnname</title>
 </head>
 <body>
-	<div class="container">
-	<nav class="navbar navbar-light" style="background-color: #e3f2fd;">
+	
+	<nav id="mainNav" class="navbar navbar-default navbar-fixed-top navbar-custom">
 	  <div class="nav navbar-nav">
 	    <a href="/" class="btn btn-warning btn-lg active" role="button">Home</a>
+	    </div>
 	  </div>
 	</nav>
-	</div>
 
+<div class="container" style = "padding-top:200px">
 	<center>Chatroom
 	<div id="message" style="width: 500px; height: 500px; border: 1px solid black;"></div>
 	<br>
